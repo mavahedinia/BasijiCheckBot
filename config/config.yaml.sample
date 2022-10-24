@@ -1,0 +1,10 @@
+log:
+  level: debug
+
+telegram:
+  bot:
+    token: <your bot token>
+  admins:
+    - admin_id 1
+    - admin_id 2
+    - admin_id 3

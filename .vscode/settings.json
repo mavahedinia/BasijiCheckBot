@@ -1,0 +1,6 @@
+{
+    "gopls":{
+        "local": "github.com/mavahedinia/BasijiCheckBot",
+        "formatting.gofumpt": true,
+    }
+}
