@@ -8,3 +8,7 @@ telegram:
     - admin_id 1
     - admin_id 2
     - admin_id 3
+
+storage:
+  wait-time: 1s
+  filename: test.json

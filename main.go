@@ -11,12 +11,13 @@ import (
 
 func main() {
 	config := configs.NewConfig()
+	storage := inmemory.NewGroupInfoStorage(config)
 
 	bot, err := tgbotapi.NewBotAPI(config.GetString("telegram.bot.token"))
 	if err != nil {
 		logrus.WithError(err).Panic("Failed to initialize bot")
 	}
-	basijiBot := basijibot.NewBasijiBot(config, bot, inmemory.NewGroupInfoStorage())
+	basijiBot := basijibot.NewBasijiBot(config, bot, storage)
 
 	logrus.WithField("botUserName", bot.Self.UserName).Info("Authorized on account")
 

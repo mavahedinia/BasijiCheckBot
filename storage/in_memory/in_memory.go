@@ -1,7 +1,13 @@
 package inmemory
 
 import (
+	"encoding/json"
+	"io/ioutil"
+	"time"
+
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
+	"github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
 )
 
 type MemberInfo struct {
@@ -33,12 +39,60 @@ func NewChatInfo(chat *tgbotapi.Chat, bms map[int]*MemberInfo) *ChatInfo {
 }
 
 type GroupInfoStorage struct {
+	config *viper.Viper
 	groups map[int64]*ChatInfo
 }
 
-func NewGroupInfoStorage() *GroupInfoStorage {
-	return &GroupInfoStorage{
+func NewGroupInfoStorage(config *viper.Viper) *GroupInfoStorage {
+	gis := &GroupInfoStorage{
+		config: config,
 		groups: make(map[int64]*ChatInfo),
+	}
+
+	gis.loadData()
+
+	go gis.persistData()
+
+	return gis
+}
+
+func (gis *GroupInfoStorage) persistData() {
+	sleepDuration := gis.config.GetDuration("storage.wait-time")
+	for true {
+		time.Sleep(sleepDuration)
+
+		gis.writeData()
+	}
+}
+
+func (gis *GroupInfoStorage) loadData() {
+	filename := gis.config.GetString("storage.filename")
+	data, err := ioutil.ReadFile(filename)
+	if err != nil {
+		logrus.WithError(err).Error("error in opening data file.")
+		return
+		// panic(1)
+	}
+
+	err = json.Unmarshal(data, &gis.groups)
+	if err != nil {
+		logrus.WithError(err).Error("error in reading data.")
+	}
+}
+
+func (gis *GroupInfoStorage) writeData() {
+	filename := gis.config.GetString("storage.filename")
+	logrus.WithField("filename", filename).Info("writing to file.")
+
+	content, err := json.Marshal(gis.groups)
+	if err != nil {
+		logrus.WithError(err).Error("error in marshalling groups data.")
+		return
+	}
+
+	err = ioutil.WriteFile(filename, content, 0o644)
+	if err != nil {
+		logrus.WithError(err).Error("error in writing data.")
 	}
 }
 
