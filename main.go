@@ -32,7 +32,7 @@ func main() {
 			continue
 		}
 
-		if handled := basijiBot.HandleNormalMessage(update.Message); handled {
+		if handled := basijiBot.HandleNormalMessage(update.Message); handled && !update.Message.IsCommand() {
 			continue
 		}
 
