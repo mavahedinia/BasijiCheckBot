@@ -2,6 +2,7 @@
 Description=A bot to make Basijis shut up in telegram groups
 
 [Service]
+Environment="BOT_CONFIG_FILE=config-prod"
 User=amin
 WorkingDirectory=/home/amin/BasijiCheckBot
 ExecStart=/home/amin/BasijiCheckBot/BasijiCheckBot
