@@ -1,0 +1,11 @@
+[Unit]
+Description=A bot to make Basijis shut up in telegram groups
+
+[Service]
+User=amin
+WorkingDirectory=/home/amin/BasijiCheckBot
+ExecStart=/home/amin/BasijiCheckBot/BasijiCheckBot
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
