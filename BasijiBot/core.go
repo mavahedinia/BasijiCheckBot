@@ -74,8 +74,9 @@ func (bb *BasijiBot) HandleNormalMessage(message *tgbotapi.Message) bool {
 		return false
 	}
 
-	response := tgbotapi.NewMessage(message.Chat.ID, "بسیجی ساکت شو!")
+	response := tgbotapi.NewPhotoUpload(message.Chat.ID, "photos/sandis.jpg")
 	response.ReplyToMessageID = message.MessageID
+	response.Caption = "ساندیس بقول :*"
 
 	resp, err := bb.TgBot.Send(response)
 	if err != nil {
